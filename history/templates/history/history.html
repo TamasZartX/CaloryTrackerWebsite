@@ -1,0 +1,119 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>История тренировок</title>
+<style>
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+  }
+
+  .history-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Разделяет плитки */
+  }
+
+  .date-section {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .history-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 10px;
+  }
+
+  .history-item h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #007bff; /* Цвет заголовка шаблона */
+  }
+
+  .history-item h3:hover {
+    color: #0056b3;
+  }
+
+  .history-item ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .history-item li {
+    margin-bottom: 10px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .exercise-name {
+    font-weight: bold;
+    color: #333;
+  }
+
+  .exercise-sets {
+    color: #999;
+  }
+</style>
+</head>
+
+<body>
+<div class="container">
+  <h1>История тренировок</h1>
+  <div class="history-container">
+    {% for date, templates in grouped_data.items %}
+      <div class="date-section">
+        <h2>{{ date }}</h2>
+        {% for template_name, exercises in templates.items %}
+          <div class="history-item">
+            <a href="{% url 'history:detail' template_name date %}" style="text-decoration: none;"><h3>{{ template_name }}</h3></a>
+            <ul>
+              {% for exercise_name, sets in exercises.items %}
+                <li>
+                  <span class="exercise-name">{{ exercise_name }}</span>
+                  <span class="exercise-sets" data-sets="{{ sets }}">{{ sets }} подходов</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  // JavaScript для изменения формы слова "подход" в зависимости от числа
+  document.addEventListener('DOMContentLoaded', function() {
+    const exerciseSetsElements = document.querySelectorAll('.exercise-sets');
+    exerciseSetsElements.forEach(element => {
+      const sets = parseInt(element.getAttribute('data-sets'));
+      element.textContent = getSetsText(sets);
+    });
+
+    function getSetsText(sets) {
+      if (sets % 10 === 1 && sets % 100 !== 11) {
+        return sets + ' подход';
+      } else if ([2, 3, 4].includes(sets % 10) && ![12, 13, 14].includes(sets % 100)) {
+        return sets + ' подхода';
+      } else {
+        return sets + ' подходов';
+      }
+    }
+  });
+</script>
+
+</body>
+{% endblock content %}

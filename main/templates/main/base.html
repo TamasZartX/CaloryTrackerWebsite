@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Site{% endblock title %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_head %}{% endblock extra_head %}
+</head>
+<body>
+    <nav>
+        <ul class="nav-left">
+            <li><a href="{% url 'main:index' %}">Главная</a></li>
+            <li><a href="{% url 'training:template_list' %}">Тренировка</a></li>
+            <li><a href="{% url 'history:history_list' %}">История</a></li>
+            <li><a href="{% url 'body:body_view' %}">Антропометрия</a></li>
+            <li><a href="{% url 'food:index' %}">Питание</a></li>
+        </ul>
+        <ul class="nav-right">
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'users:profile' %}">Профиль</a></li>
+            <li><a href="{% url 'users:logout' %}">Выйти</a></li>
+            {% else %}
+            <li><a href="{% url 'users:login' %}">Войти</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    <div class="container">
+        {% block content %}{% endblock content %}
+    </div>
+</body>
+</html>
