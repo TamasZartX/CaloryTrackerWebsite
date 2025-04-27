@@ -53,7 +53,3 @@ CaloryTrackerWebsite — сайт для учёта питания, тренир
 - Python 3.10+
 - PostgreSQL
 - Django 4.x
-
-## Лицензия
-
-Этот проект лицензирован под MIT License.
